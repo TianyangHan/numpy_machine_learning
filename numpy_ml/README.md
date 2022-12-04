@@ -1,32 +1,5 @@
-# numpy-ml
-Ever wish you had an inefficient but somewhat legible collection of machine
-learning algorithms implemented exclusively in NumPy? No?
-
-## Installation
-
-### For rapid experimentation
-To use this code as a starting point for ML prototyping / experimentation, just clone the repository, create a new [virtualenv](https://pypi.org/project/virtualenv/), and start hacking:
-
-```sh
-$ git clone https://github.com/ddbourgin/numpy-ml.git
-$ cd numpy-ml && virtualenv npml && source npml/bin/activate
-$ pip3 install -r requirements-dev.txt
-```
-
-### As a package
-If you don't plan to modify the source, you can also install numpy-ml as a
-Python package: `pip3 install -u numpy_ml`.
-
-The reinforcement learning agents train on environments defined in the [OpenAI
-gym](https://github.com/openai/gym). To install these alongside numpy-ml, you
-can use `pip3 install -u 'numpy_ml[rl]'`.
-
-## Documentation
-For more details on the available models, see the [project documentation](https://numpy-ml.readthedocs.io/).
-
-## Available models
-<details>
-  <summary>Click to expand!</summary>
+# Models
+This repo includes code for the following models:
 
 1. **Gaussian mixture model**
     - EM training
@@ -95,7 +68,6 @@ For more details on the available models, see the [project documentation](https:
         - Leaky ReLU
         - ELU
         - SELU
-        - GELU
         - Exponential
         - Hard Sigmoid
         - Softplus
@@ -120,9 +92,8 @@ For more details on the available models, see the [project documentation](https:
     - Ridge regression
     - Logistic regression
     - Ordinary least squares
-    - Weighted linear regression
-    - Generalized linear model (log, logit, and identity link)
     - Gaussian naive Bayes classifier
+    - Generalized linear model (identity, log, and logit links)
     - Bayesian linear regression w/ conjugate priors
         - Unknown mean, known variance (Gaussian prior)
         - Unknown mean, unknown variance (Normal-Gamma / Normal-Inverse-Wishart prior)
@@ -180,15 +151,3 @@ For more details on the available models, see the [project documentation](https:
     - Ball tree
     - Discrete sampler
     - Graph processing and generators
-</details>
-
-## Contributing
-
-Am I missing your favorite model? Is there something that could be cleaner /
-less confusing? Did I mess something up? Submit a PR! The only requirement is
-that your models are written with just the [Python standard
-library](https://docs.python.org/3/library/) and [NumPy](https://www.numpy.org/). The
-[SciPy library](https://scipy.github.io/devdocs/) is also permitted under special
-circumstances ;)
-
-See full contributing guidelines [here](./CONTRIBUTING.md).
