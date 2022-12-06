@@ -855,6 +855,8 @@ class Multiply(LayerBase):
             grads = [g * x if j != i else g for j, g in enumerate(grads)]
         return grads
 
+        # dLdy here means, for example, L = y-y`, then dLdy = 1
+
 
 class Flatten(LayerBase):
     def __init__(self, keep_dim="first", optimizer=None):
@@ -1144,7 +1146,8 @@ class BatchNorm2D(LayerBase):
         X_var = self.parameters["running_var"]
 
         if self.trainable and retain_derived:
-            X_mean, X_var = X.mean(axis=(0, 1, 2)), X.var(axis=(0, 1, 2))  # , ddof=1)
+            # why call batch? because like conv operation is based on each channel, then channel is a batch
+            X_mean, X_var = X.mean(axis=(0, 1, 2)), X.var(axis=(0, 1, 2))  # , ddof=1)      # 3 is channel, batchnorm is norm on channel(across different datapoints)
             self.parameters["running_mean"] = mm * rm + (1.0 - mm) * X_mean
             self.parameters["running_var"] = mm * rv + (1.0 - mm) * X_var
 
@@ -1196,7 +1199,7 @@ class BatchNorm2D(LayerBase):
 
         # reshape to 2D, retaining channel dim
         X_shape = X.shape
-        X = np.reshape(X, (-1, X.shape[3]))
+        X = np.reshape(X, (-1, X.shape[3]))     # input dim is N,H,W,C
         dLdy = np.reshape(dLdy, (-1, dLdy.shape[3]))
 
         # apply 1D batchnorm backward pass on reshaped array
@@ -1204,8 +1207,8 @@ class BatchNorm2D(LayerBase):
         X_mean, X_var = X.mean(axis=0), X.var(axis=0)  # , ddof=1)
 
         N = (X - X_mean) / np.sqrt(X_var + ep)
-        dIntercept = dLdy.sum(axis=0)
-        dScaler = np.sum(dLdy * N, axis=0)
+        dIntercept = dLdy.sum(axis=0)    # y = schaler * x + intercept
+        dScaler = np.sum(dLdy * N, axis=0)  # here N is x
 
         dN = dLdy * scaler
         dX = (n_ex * dN - dN.sum(axis=0) - N * (dN * N).sum(axis=0)) / (
@@ -1563,7 +1566,7 @@ class LayerNorm2D(LayerBase):
         if retain_derived:
             self.X.append(X)
 
-        X_var = X.var(axis=(1, 2, 3), keepdims=True)
+        X_var = X.var(axis=(1, 2, 3), keepdims=True)  # 0 dim is N, do norm on dim C, H, W, means norm on datapoint itself, not cross different datapoints
         X_mean = X.mean(axis=(1, 2, 3), keepdims=True)
         lnorm = (X - X_mean) / np.sqrt(X_var + ep)
         y = scaler * lnorm + intercept
