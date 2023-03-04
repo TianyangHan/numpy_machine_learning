@@ -64,7 +64,7 @@ class LogisticRegression:
         ----------
         penalty : {'l1', 'l2'}
             The type of regularization penalty to apply on the coefficients
-            `beta`. Default is 'l2'.
+            `beta`. Default is 'l2'.Logis
         gamma : float
             The regularization weight. Larger values correspond to larger
             regularization penalties, and a value of 0 indicates no penalty.
